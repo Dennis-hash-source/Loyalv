@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOYAL VAULT - Manage Your Group Money, Clearly.</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Arial}
+:root{--green:#0B6B3A;--gold:#C9A227;--light:#F4F7F5;--muted:#6B7A70}
+body{background:var(--light);color:#12251A}
+header{position:sticky;top:0;z-index:50;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:14px 16px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.logo{font-weight:900;font-size:22px;color:var(--green);cursor:pointer;user-select:none}.logo span{color:var(--gold)}
+.menuBtn{font-size:22px;background:#EEF3F0;border:1px solid #DDE7E0;padding:8px 12px;border-radius:10px;cursor:pointer}
+.hero{background:linear-gradient(135deg,#0B6B3A,#0E8A4B 55%,#0A1F14);color:#fff;padding:32px 18px 28px;text-align:center;border-radius:0 0 24px 24px;overflow:hidden}
+.hero h1{font-size:34px;line-height:1.08}.hero p{opacity:.92;margin:12px auto;max-width:520px;line-height:1.5}
+.btn{display:inline-block;border:0;padding:14px 18px;border-radius:12px;font-weight:800;cursor:pointer;font-size:15px}
+.btnWhite{background:#fff;color:var(--green)} .btnGold{background:var(--gold);color:#111}
+.btnGreen{background:var(--green);color:#fff;width:100%} .btnLine{background:#fff;border:1px solid #DDE7E0;color:#12251A;width:100%}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.05);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:700px){.grid{grid-template-columns:1fr 1fr 1fr}}
+.kpi{font-size:22px;font-weight:900;color:var(--green)}
+.small{color:var(--muted);font-size:13px;line-height:1.5}
+input,select,textarea{width:100%;padding:13px;border:1px solid #DDE7E0;border-radius:11px;margin:7px 0;font-size:15px;background:#fff}
+label{font-size:13px;font-weight:700;color:#33473B}
+.hidden{display:none!important}
+.drawer{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;display:none}.drawer.open{display:block}
+.drawerBox{position:absolute;right:0;top:0;width:86%;max-width:340px;height:100%;background:#fff;padding:18px;overflow:auto}
+.drawerBox button{display:block;width:100%;text-align:left;padding:13px;border:0;background:#F4F7F5;border-radius:11px;margin-bottom:9px;font-weight:700;cursor:pointer}
+.badge{display:inline-block;background:#FFF3C4;color:#6B5200;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}
+.navTabs{display:flex;gap:8px;overflow:auto;padding:6px 0}.navTabs button{white-space:nowrap;padding:10px 13px;border-radius:999px;border:1px solid #DDE7E0;background:#fff;font-weight:700;cursor:pointer}.navTabs button.active{background:var(--green);color:#fff}
+.red{color:#C00;font-weight:800}.green{color:var(--green);font-weight:800}
+.footer{padding:22px;text-align:center;color:var(--muted);font-size:13px}
+.laptopWrap{max-width:640px;margin:20px auto 6px}
+.laptopScreen{background:#fff;border:6px solid #111;border-radius:14px 14px 0 0;padding:14px;text-align:left;box-shadow:0 18px 40px rgba(0,0,0,.35);color:#12251A}
+.laptopBase{height:14px;background:#1a1a1a;border-radius:0 0 18px 18px;margin:0 auto;width:110%;margin-left:-5%;position:relative}
+.laptopBase:after{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);width:110px;height:5px;background:#333;border-radius:0 0 10px 10px}
+.lapTopBar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.lapDot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.lapRow{display:flex;gap:10px;margin-top:10px}
+.lapBox{flex:1;background:#F4F7F5;border-radius:10px;padding:10px}
+.lapBox b{font-size:15px;color:#0B6B3A}
+.lapAudit{background:#0B6B3A;color:#fff;border-radius:11px;padding:11px;margin-top:10px;font-size:13px;line-height:1.5}
+.chartBox{background:#F4F7F5;border-radius:10px;padding:12px;margin-top:10px}
+.barRow{display:flex;align-items:end;gap:10px;height:90px;margin-top:8px}
+.barCol{flex:1;text-align:center}.bar{border-radius:6px 6px 0 0;margin:0 auto;width:100%;max-width:36px}
+.donut{width:78px;height:78px;border-radius:50%;background:conic-gradient(#0B6B3A 0 58%, #C9A227 58% 78%, #E2EDE6 78% 100%);display:flex;align-items:center;justify-content:center;margin:0 auto}
+.donutInner{width:46px;height:46px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#0B6B3A;text-align:center}
+.feat{display:flex;gap:12px;align-items:flex-start}
+.featIcon{width:38px;height:38px;min-width:38px;background:#E6F4EB;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#0B6B3A}
+.pill{display:inline-block;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:800}
+table{width:100%;border-collapse:collapse;font-size:13px} th,td{padding:8px;border-bottom:1px solid #EEE;text-align:left}
+.autoBadge{background:#0B6B3A;color:#fff;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:800}
+.modeBadge{background:#C9A227;color:#111;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:800}
+.lockBox{background:#FFF3C4;border:2px solid #C9A227;border-radius:16px;padding:20px;text-align:center}
+.planBox{display:flex;gap:10px}.planBox button{flex:1;padding:14px;border:2px solid #DDE7E0;background:#fff;border-radius:12px;font-weight:800;cursor:pointer}.planBox button.active{border-color:#0B6B3A;background:#E6F4EB;color:#0B6B3A}
+</style>
+</head>
+<body>
+<header><div class="logo" id="logoTap">LOYAL <span>VAULT</span></div><button class="menuBtn" onclick="openMenu()">☰</button></header>
+<div class="drawer" id="drawer" onclick="if(event.target===this)closeMenu()"><div class="drawerBox"><h3>Menu</h3><p class="small">LOYAL VAULT</p><br>
+<button onclick="showPage('home');closeMenu()">Home</button><button onclick="showPage('about');closeMenu()">About Us</button><button onclick="showPage('how');closeMenu()">How It Works</button><button onclick="showPage('why');closeMenu()">Why Us</button><button onclick="showPage('features');closeMenu()">All Features</button><button onclick="showPage('create');closeMenu()">Create Group</button><button onclick="showPage('signin');closeMenu()">Sign In</button><button onclick="showPage('help');closeMenu()">Help</button><button onclick="showPage('contact');closeMenu()">Contact / Support</button>
+</div></div>
+
+<div id="page-home"><div class="hero"><span class="badge">7 DAYS FREE TRIAL • MONTHLY OR YEARLY • AUTO LOCK / UNLOCK</span><h1 style="margin-top:12px">Manage Your Group<br>Money, Clearly.</h1><p>Chama. SACCO. Company. NGO.<br>Try FREE for 7 days. Then pay Monthly or Yearly via Paystack. Yearly = Pay 10 months, Get 12 months.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btnWhite" onclick="showPage('create')">Start 7-Day Free Trial</button><button class="btn btnGold" onclick="showPage('signin')">Sign In</button></div>
+<div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap"><span style="background:rgba(255,255,255,.18);padding:8px 14px;border-radius:99px;font-size:13px">Monthly — 30 Days</span><span style="background:#C9A227;color:#111;padding:8px 14px;border-radius:99px;font-size:13px;font-weight:800">Yearly — 365 Days • Save 2 Months</span></div>
+<div class="laptopWrap"><div class="laptopScreen">
+<div class="lapTopBar"><div><span class="lapDot" style="background:#FF5F57"></span> <span class="lapDot" style="background:#FEBC2E"></span> <span class="lapDot" style="background:#28C840"></span> <b style="margin-left:8px;font-size:13px">LOYAL VAULT — Auto Audit</b></div><span class="autoBadge">AUTO ✓</span></div>
+<div style="display:flex;gap:8px"><span style="font-size:11px;background:#0B6B3A;color:#fff;padding:5px 10px;border-radius:99px">SACCO</span><span style="font-size:11px;background:#EEF3F0;padding:5px 10px;border-radius:99px">NGO</span><span style="font-size:11px;background:#EEF3F0;padding:5px 10px;border-radius:99px">Company</span><span style="font-size:11px;background:#EEF3F0;padding:5px 10px;border-radius:99px">Chama</span></div>
+<div class="lapRow"><div class="lapBox"><div style="font-size:11px;color:#6B7A70">TOTAL IN</div><b>KES 248,500</b><div style="font-size:11px;color:#0B6B3A">Auto</div></div><div class="lapBox"><div style="font-size:11px;color:#6B7A70">LOANS / PROJECTS</div><b>KES 86,000</b><div style="font-size:11px;color:#C9A227">Auto</div></div><div class="lapBox"><div style="font-size:11px;color:#6B7A70">CASH REMAINING</div><b>KES 162,500</b><div style="font-size:11px;color:#0B6B3A">✓ Balanced</div></div></div>
+<div class="chartBox"><b style="font-size:13px">Money Growth — Auto</b><svg viewBox="0 0 300 90" width="100%" height="90" style="margin-top:6px"><polyline points="0,75 50,65 100,55 150,48 200,32 250,22 300,12" fill="none" stroke="#0B6B3A" stroke-width="3" stroke-linecap="round"/><polygon points="0,75 50,65 100,55 150,48 200,32 250,22 300,12 300,90 0,90" fill="#0B6B3A" opacity="0.12"/><circle cx="300" cy="12" r="5" fill="#0B6B3A"/></svg><div style="display:flex;justify-content:space-between;font-size:10px;color:#6B7A70"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div></div>
+<div class="lapAudit"><b>AUTO AUDIT ✓</b><br><b>SACCO:</b> Cash = Contributions + Fines + Repayments - Expenses - Loans Given<br><b>NGO:</b> Cash = Donations + Grants - Project Expenses<br><b>Company:</b> Cash = Capital + Client Payments - Salaries - Expenses</div>
+</div><div class="laptopBase"></div></div>
+</div>
+<div class="wrap"><div class="grid"><div class="card"><h3>SACCO / Chama</h3><p class="small">Admin = Chair. Treasurer holds money. 7 days free.</p></div><div class="card"><h3>NGO</h3><p class="small">Admin = Director. Finance Officer. 7 days free.</p></div><div class="card"><h3>Company</h3><p class="small">Admin = Company Owner / Director. Accountant. 7 days free.</p></div></div><div class="card"><h3>Choose Your Plan — Monthly or Yearly</h3><p class="small"><b>Monthly:</b> Pay 1x group price, unlock 30 days.<br><b>Yearly:</b> Pay 10x group price, unlock 365 days. Save 2 months free. Example: Price 500 → Monthly 500, Yearly 5000.</p><button class="btn btnGreen" onclick="showPage('create')">Start Free Trial</button></div></div></div>
+
+<div id="page-about" class="wrap hidden"><div class="card"><h2>About Us</h2><p class="small">LOYAL VAULT helps SACCO, Chama, NGO, Company manage money clearly, automatically. 7 days free trial, then Monthly or Yearly subscription.</p></div></div>
+<div id="page-how" class="wrap hidden"><div class="card"><h2>How It Works</h2><p class="small">1. Create Group — 7-Day Free Trial Starts<br>2. Use Full System 7 Days<br>3. Day 8: Auto Locks — Choose Monthly or Yearly<br>4. Pay via Paystack (Goes to LOYAL VAULT)<br>5. Auto Unlocks — Monthly 30 Days, Yearly 365 Days<br>6. After period ends: Auto Locks Again — Pay Again</p></div></div>
+<div id="page-why" class="wrap hidden"><div class="card"><h2>Why Us</h2><p class="small">SACCO needs interest + dividend. NGO needs donor proof. Company needs profit. One system, correct for all. 7 days free, no risk. Yearly saves 2 months.</p></div></div>
+
+<div id="page-features" class="wrap hidden">
+<div class="card"><h2>All Features — Complete List (24 Features)</h2><p class="small">Everything in LOYAL VAULT.</p></div>
+<div class="grid">
+<div class="card"><div class="feat"><div class="featIcon">★</div><div><h3>7-Day Free Trial + Auto Lock / Unlock</h3><p class="small">7 days free. Day 8 auto locks. Pay to auto unlock.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">₵</div><div><h3>Monthly or Yearly Subscription</h3><p class="small">Monthly = 1x price, 30 days. Yearly = 10x price, 365 days. Save 2 months free. Pay via Paystack to LOYAL VAULT.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">1</div><div><h3>Savings + Contributions — AUTO</h3><p class="small">Auto sum. Separate from repayments.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">2</div><div><h3>Loans + Repayment — AUTO CORRECT</h3><p class="small">Interest auto. Balance = Amount + Interest - Paid. No double count.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">3</div><div><h3>Shares / Capital — AUTO</h3><p class="small">Auto value = Shares x Price. NGO does not use shares.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">4</div><div><h3>Dividend / Profit — AUTO</h3><p class="small">Dividend per share. Company profit by capital. NGO: Donor Balance.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">5</div><div><h3>Receipt Scan With Type — AUTO POST</h3><p class="small">Saving, Contribution, Loan Repayment, Fine, Shares, Donation, Grant, Client Payment, Salary.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">6</div><div><h3>M-Pesa Fraud Check</h3><p class="small">Rejects duplicate M-Pesa, wrong format, duplicate receipt, future date, name mismatch.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">7</div><div><h3>Cashbook — AUTO</h3><p class="small">Every action auto-adds. In / Out / Balance.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">8</div><div><h3>Audit Trail — AUTO</h3><p class="small">Who, Role, What, When.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">9</div><div><h3>Roles — CORRECT TITLES</h3><p class="small">SACCO: Admin=Chair, Treasurer. NGO: Admin=Director, Finance Officer. Company: Admin=Company Owner, Accountant.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">10</div><div><h3>Expenditure Approval</h3><p class="small">Only Approved counts. Pending does NOT count.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">11</div><div><h3>Trial Balance + Reports — AUTO CORRECT</h3><p class="small">Trial Balance, Income & Expenditure, Balance Sheet. Correct per type.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">12</div><div><h3>Fines — AUTO</h3><p class="small">SACCO only. NGO/Company: No fines.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">13</div><div><h3>Member Exit — AUTO</h3><p class="small">Payout = Savings + Shares - Loan. NGO: No payout.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">14</div><div><h3>Export CSV</h3><p class="small">For Auditor / Donor.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">15</div><div><h3>Donations + Grants — NGO</h3><p class="small">Donor Report: Gave X, Spent Y, Remaining Z.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">16</div><div><h3>Client Payment + Salary — Company</h3><p class="small">Client = Income. Salary = Expense. Profit auto.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">17</div><div><h3>Old Loan / Old Project</h3><p class="small">Add loan taken before joining. Auto balance.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">18</div><div><h3>Admin Section — LOCKED</h3><p class="small">Only Admin Password. Group Key, Approve Loans, Approve Expenses, Settings.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">19</div><div><h3>Pay to Group — Group's Own Key</h3><p class="small">Members pay to Group's own Paystack key, NOT to Website Owner.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">20</div><div><h3>Per-Group Subscription Price</h3><p class="small">Website Owner sets different price per group. Small Chama 200, Big SACCO 1000, NGO 0, Company 1500.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">21</div><div><h3>Group Types — 3 Correct Modes</h3><p class="small">SACCO/Chama, NGO, Company. Formulas, titles, features change by type.</p></div></div></div>
+<div class="card"><div class="feat"><div class="featIcon">22</div><div><h3>Automatic Calculations</h3><p class="small">Loan Balance, Group Balance, Cashbook, Dividend, Exit — All auto.</p></div></div></div>
+</div>
+<div class="card"><button class="btn btnGreen" onclick="showPage('create')">Start 7-Day Free Trial</button></div>
+</div>
+
+<div id="page-help" class="wrap hidden"><div class="card"><h2>Help</h2><p class="small">Trial ended? Choose Monthly or Yearly and Pay Subscription in Dashboard. It will unlock automatically after payment via Paystack. Yearly saves 2 months.</p></div></div>
+<div id="page-contact" class="wrap hidden"><div class="card"><h2>Contact / Support</h2><p class="small" id="supportText">Support contact will be added by the platform manager.</p></div></div>
+
+<!-- CREATE GROUP - PATCHED: NO DONOR / PROJECT HERE, CHAMA-ONLY FIELDS HIDDEN FOR NGO/COMPANY -->
+<div id="page-create" class="wrap hidden"><div class="card"><h2>Create Group — 7-Day Free Trial Starts Now</h2><p class="small" style="color:#0B6B3A;font-weight:700">Your 7 days free trial starts the moment you create group. No payment needed today. After 7 days, it locks until you pay Monthly or Yearly.</p>
+<label>Group Name</label><input id="gName" placeholder="e.g. Upendo SACCO / Hope NGO / Bright Ltd">
+<label>Group Type</label><select id="gType" onchange="typeHint()"><option>Chama</option><option>SACCO</option><option>Company</option><option>NGO</option><option>Circle</option><option>Other</option></select><p class="small" id="typeHint" style="color:#0B6B3A;font-weight:700"></p>
+<label id="lblCreator">Your Name — You Are Creating This Group (Group Creator / Chair)</label><input id="gOwner" placeholder="Your full name">
+<label>Your Phone — Group Creator Phone</label><input id="gPhone" placeholder="07...">
+<label>Group Password — Members / Staff VIEW ONLY</label><input id="gPass" type="password">
+<label id="lblAdminPass">Admin Password — FULL CONTROL</label><input id="gAdminPass" type="password">
+<hr>
+<label>Contribution / Dues / Capital (KES)</label><input id="gAmount" type="number" placeholder="e.g. 1000">
+<label>Frequency</label><select id="gFreq"><option value="Monthly">Once a Month</option><option value="Weekly">Every Week</option><option value="Every 2 Weeks">Every 2 Weeks</option><option value="Daily">Daily</option></select>
+<!-- CHAMA / SACCO ONLY - HIDDEN FOR NGO / COMPANY -->
+<div id="chamaOnlyFields">
+<label>Late Fine (KES) — SACCO/Chama only</label><input id="gFine" type="number" value="0">
+<label>Interest Rate (%) — SACCO/Chama only</label><input id="gInterest" type="number" value="10">
+<label>Share Price (KES)</label><input id="gSharePrice" type="number" value="100">
+<label>Contribution Due Day</label><input id="gDueDay" type="number" value="5">
+</div>
+<div id="ngoCompanyNote" class="hidden"><p class="small" style="background:#FFF3C4;padding:10px;border-radius:10px;color:#333">For NGO / Company: You will add <b>Donor Manager</b> or <b>Project / Business Manager</b> AFTER login inside Dashboard → Admin Section. You can add many donors / projects any time.</p></div>
+<button class="btn btnGreen" onclick="createGroup()">Create Group — Start 7-Day Free Trial</button><p class="small" id="createMsg"></p>
+<div id="subPayBox" class="hidden"><h3>Your Trial Is Running — You Can Also Pay Early</h3><p class="small" id="subPriceText"></p><p class="small">Choose Monthly or Yearly. Yearly = Pay 10x, Get 12 months — Save 2 months free.</p>
+<label>Choose Plan</label><div class="planBox"><button id="planMonthlyBtn" class="active" onclick="selectPlan('Monthly','sub')">Monthly — 30 Days</button><button id="planYearlyBtn" onclick="selectPlan('Yearly','sub')">Yearly — 365 Days • Save 2 Months</button></div>
+<label>Subscription Amount (KES) — Auto calculated from plan</label><input id="subAmt" type="number" value="500" readonly><p class="small" id="subPlanText"></p>
+<button class="btn btnGold" onclick="paySubscription()">Pay Subscription — Unlock via Paystack</button><p class="small" id="subMsg"></p><button class="btn btnLine" onclick="openDash()">Continue With Free Trial →</button></div>
+</div></div>
+
+<div id="page-signin" class="wrap hidden"><div class="card"><h2>Sign In</h2>
+<label>Group Code</label><input id="sCode" placeholder="e.g. LV-1234">
+<label>Your Name</label><input id="sName" placeholder="Your name">
+<label>Your Role</label><select id="sRole"><option>Member</option><option>Admin</option><option>Chair</option><option>Treasurer</option><option>Secretary</option><option>Accountant</option><option>Finance Officer</option><option>Staff</option><option>Donor</option></select>
+<label>Password</label><input id="sPass" type="password">
+<button class="btn btnGreen" onclick="signIn()">Sign In</button><p class="small" id="signMsg"></p>
+</div></div>
+
+<div id="page-dash" class="wrap hidden">
+<div id="lockScreen" class="card hidden"><div class="lockBox"><h2>🔒 Trial Ended — Group Locked</h2><p class="small" id="lockText" style="font-size:14px;color:#333"></p><p class="small">Your 7-day free trial ended. Choose Monthly or Yearly to unlock. Payment goes to LOYAL VAULT via Paystack. After payment, system unlocks AUTOMATICALLY.</p>
+<label>Choose Plan</label><div class="planBox"><button id="lockPlanMonthly" class="active" onclick="selectPlan('Monthly','lock')">Monthly — 30 Days</button><button id="lockPlanYearly" onclick="selectPlan('Yearly','lock')">Yearly — 365 Days • Save 2 Months</button></div>
+<label>Subscription Amount For This Group (KES)</label><input id="lockAmt" type="number" readonly><p class="small" id="lockPlanText"></p>
+<button class="btn btnGold" onclick="payFromLock()">Pay Subscription — Unlock Now via Paystack</button><p class="small" id="lockMsg"></p></div></div>
+<div id="dashMain">
+<div class="card"><h2 id="dashTitle">Group</h2><p class="small" id="dashSub"></p><p class="small" id="dashRole"></p><p class="small" id="modeInfo" style="color:#0B6B3A;font-weight:700"></p><p class="small" id="subInfo" style="color:#6B5200;font-weight:700"></p><p class="small" id="trialInfo" style="color:#0B6B3A;font-weight:800"></p>
+<div class="card" style="background:#FFF3C4;border:1px solid #C9A227;margin-top:10px"><h3>Subscription — Monthly or Yearly</h3><p class="small" id="subBanner"></p><label>Choose Plan</label><div class="planBox"><button id="dashPlanMonthly" class="active" onclick="selectPlan('Monthly','dash')">Monthly — 30 Days</button><button id="dashPlanYearly" onclick="selectPlan('Yearly','dash')">Yearly — 365 Days • Save 2 Months</button></div><label>Pay Subscription For This Group (KES) — Goes to LOYAL VAULT via Paystack</label><input id="dashSubAmt" type="number" readonly><p class="small" id="dashPlanText"></p><button class="btn btnGold" onclick="payFromDashboard()">Pay Subscription — Unlock / Extend via Paystack</button><p class="small" id="dashPayMsg"></p></div>
+<div class="grid"><div><div class="small" id="kSavLabel">Total In</div><div class="kpi" id="kSav">KES 0</div></div><div><div class="small" id="kLoanLabel">Loans / Projects</div><div class="kpi" id="kLoan">KES 0</div></div><div><div class="small">Cash Remaining</div><div class="kpi" id="kBal">KES 0</div></div><div><div class="small">Fines / Donations</div><div class="kpi" id="kFine">KES 0</div></div><div><div class="small">Shares / Capital</div><div class="kpi" id="kShare">0</div></div><div><div class="small">Members / Staff</div><div class="kpi" id="kMem">0</div></div></div>
+<p class="small" id="auditLine"></p><p class="small" id="autoNote" style="color:#0B6B3A;font-weight:700"></p><button class="btn btnLine" onclick="exportCSV()">Download CSV For Auditor / Donor</button></div>
+<div class="navTabs">
+<button class="active" onclick="tab('savings',this)">Savings / Income</button><button onclick="tab('loans',this)">Loans / Projects</button><button onclick="tab('shares',this)">Shares / Capital</button><button onclick="tab('receipts',this)">Scan Receipt</button><button onclick="tab('expense',this)">Expenditure</button><button onclick="tab('members',this)">Members</button><button onclick="tab('cashbook',this)">Cashbook</button><button onclick="tab('audit',this)">Audit Trail</button><button onclick="tab('reports',this)">Reports / Audit</button><button onclick="tab('dividend',this)">Dividend / Profit</button><button onclick="tab('admin',this)">Admin Section</button><button onclick="tab('pay',this)">Pay to Group</button>
+</div>
+<div id="tab-savings" class="card"><h3 id="savTitle">Record Contribution / Income</h3><p class="small" id="contInfo"></p><p class="small" id="lateInfo" style="color:#C00;font-weight:700"></p><label>Member / Donor / Client Name</label><input id="svName"><label>Amount</label><input id="svAmt" type="number"><label>M-Pesa Code</label><input id="svCode" placeholder="QJ... 10 chars"><button class="btn btnGreen" onclick="recordSaving()">Record — Auto</button><p class="small" id="svMsg"></p><div id="svList"></div></div>
+<div id="tab-loans" class="card hidden"><h3 id="loanTitle">Loan / Project Request</h3><label>Member Name + ID / Project Name</label><input id="lnName"><label>Amount Wanted / Project Budget</label><input id="lnAmt" type="number" oninput="autoLoanCalc()"><p class="small" id="autoLoanPreview" style="color:#0B6B3A;font-weight:700"></p><label>Purpose / Project</label><select id="lnPurpose"><option>Business</option><option>School Fees</option><option>Emergency</option><option>Farming</option><option>Project</option><option>Other</option></select><label>Months / Duration</label><input id="lnMonths" type="number" value="6"><label>Monthly Income / Donor</label><input id="lnIncome"><label>Guarantor 1 / Supervisor</label><input id="lnG1"><label>Guarantor 2 / Supervisor 2</label><input id="lnG2"><label>Collateral / Document</label><input id="lnColl"><button class="btn btnGreen" onclick="applyLoan()">Submit — Auto</button><p class="small" id="lnMsg"></p><div id="lnList"></div><hr><h3>Record Repayment — Auto Reduce</h3><label>Member / Project Name</label><input id="rpName"><label>Amount Repaid</label><input id="rpAmt" type="number"><label>M-Pesa Code</label><input id="rpCode"><button class="btn btnGreen" onclick="repayLoan()">Record Repayment — Auto New Balance</button><p class="small" id="rpMsg"></p></div>
+<div id="tab-shares" class="card hidden"><h3 id="shareTitle">Shares / Capital Ledger</h3><p class="small" id="sharePriceInfo"></p><label>Member / Partner</label><input id="shName"><label>Shares / Capital Units</label><input id="shAmt" type="number"><button class="btn btnGreen" onclick="addShare()">Add — Auto</button><div id="shList"></div></div>
+<div id="tab-receipts" class="card hidden"><h3>Scan Receipt — Treasurer / Accountant / Finance Officer Chooses Type</h3><label>Upload Receipt Photo</label><input type="file" id="rcFile" accept="image/*"><label>WHAT IS THIS RECEIPT FOR?</label><select id="rcType"><option value="Saving">Saving</option><option value="Contribution">Contribution (SACCO/Chama)</option><option value="Loan Repayment">Loan Repayment — Auto Reduce Loan</option><option value="Fine">Fine / Late Fee (SACCO)</option><option value="Shares">Shares / Capital (SACCO/Company)</option><option value="Donation">Donation (NGO)</option><option value="Grant">Grant (NGO)</option><option value="Client Payment">Client Payment / Invoice (Company)</option><option value="Salary">Salary Payment — Expense</option></select><label>Amount</label><input id="rcAmt" type="number"><label>Date</label><input id="rcDate" type="date"><label>Name</label><input id="rcName"><label>M-Pesa Code</label><input id="rcMpesa" placeholder="QJ..."><button class="btn btnGreen" onclick="scanReceipt()">Scan & Auto Post</button><p class="small" id="rcMsg"></p><div id="rcList"></div></div>
+<div id="tab-expense" class="card hidden"><h3>Expenditure — Propose, Admin Approves</h3><label>What?</label><input id="exWhat"><label>Amount</label><input id="exAmt" type="number"><label>Requested By</label><input id="exBy"><button class="btn btnGreen" onclick="addExpense()">Propose — Pending</button><p class="small" id="exMsg"></p><div id="exList"></div><div id="exPending"></div></div>
+<div id="tab-members" class="card hidden"><h3>Members / Staff — Auto Statements</h3><label>Add Member / Staff Name</label><input id="newMemName"><label>Role</label><select id="newMemRole"><option>Member</option><option>Admin</option><option>Chair</option><option>Treasurer</option><option>Secretary</option><option>Accountant</option><option>Finance Officer</option><option>Staff</option><option>Donor</option></select><button class="btn btnGreen" onclick="addMember()">Add — Auto</button><div id="memList"></div><hr><h3>Member Exit — Auto Payout</h3><label>Member Name</label><input id="exitName"><button class="btn btnLine" onclick="calcExit()">Auto Calculate Payout</button><p class="small" id="exitMsg"></p></div>
+<div id="tab-cashbook" class="card hidden"><h3>Cashbook — Auto</h3><div id="cashList"></div></div>
+<div id="tab-audit" class="card hidden"><h3>Audit Trail — Auto</h3><div id="trailList"></div></div>
+<div id="tab-reports" class="card hidden"><h3>Reports — Auto Correct For Your Type</h3><p class="small" id="repText"></p><p class="small" id="trialText"></p><p class="small" id="incomeText"></p><p class="small" id="balanceText"></p><p class="small" id="ngoText"></p><button class="btn btnLine" onclick="window.print()">Print Report</button><button class="btn btnLine" onclick="exportCSV()">Download CSV</button></div>
+<div id="tab-dividend" class="card hidden"><h3 id="divTitle">Dividend / Profit — Auto</h3><label>Total Profit To Share (KES)</label><input id="divProfit" type="number" value="50000"><button class="btn btnGreen" onclick="calcDividend()">Auto Calculate</button><p class="small" id="divMsg"></p><div id="divList"></div></div>
+<div id="tab-admin" class="card hidden"><h3>Admin Section — Only Admin Password</h3><p class="small" id="adminLock"></p><div id="adminContent" class="hidden"><label>GROUP Payment Key — Group puts ITS OWN key here</label><input id="groupPaystack"><button class="btn btnLine" onclick="saveGroupPaystack()">Save Group Key</button>
+<!-- PATCHED: DONOR + PROJECT MANAGER - AFTER REGISTRATION ONLY -->
+<hr><h3>Donor Manager (NGO Only) — Add After Registration</h3><p class="small">NGO can start with NO donor. Add USAID, UNICEF, World Vision any time. Can add many donors.</p><label>Donor / Grant Name</label><input id="donorName" placeholder="e.g. USAID / World Vision"><label>Grant Amount (KES)</label><input id="donorAmt" type="number" placeholder="100000"><button class="btn btnGreen" onclick="addDonor()">+ Add Donor</button><div id="donorList" class="small" style="margin-top:8px"></div>
+<hr><h3>Project / Business Manager (NGO / Company Only) — Add After Registration</h3><p class="small">Company / NGO can start with NO project. Add project any time. Can add many projects.</p><label>Project / Business Name</label><input id="projName" placeholder="e.g. Clean Water Project / Shop Branch"><button class="btn btnGreen" onclick="addProject()">+ Add Project</button><div id="projList" class="small" style="margin-top:8px"></div>
+<hr><h3>Add OLD Loan / Old Project</h3><label>Member / Project</label><input id="oldName"><label>Original Amount</label><input id="oldAmt" type="number"><label>Already Paid</label><input id="oldPaid" type="number"><label>Old Interest (%) — SACCO only</label><input id="oldRate" type="number" value="10"><label>When Taken?</label><input id="oldDate" type="date"><button class="btn btnGreen" onclick="addOldLoan()">Add — Auto Balance</button><p class="small" id="oldMsg"></p><hr><h3>Approve Loans / Projects (Admin Only)</h3><div id="approveList"></div><hr><h3>Approve Expenses (Admin Only)</h3><div id="approveExpList"></div><hr><h3>Admin Settings</h3><label>Contribution / Dues</label><input id="setContrib" type="number"><label>Frequency</label><select id="setFreq"><option>Monthly</option><option>Weekly</option><option>Every 2 Weeks</option><option>Daily</option></select><label>Interest (%)</label><input id="setInterest" type="number"><label>Late Fine</label><input id="setFine" type="number"><label>Share Price</label><input id="setSharePrice" type="number"><label>Due Day</label><input id="setDueDay" type="number"><button class="btn btnGreen" onclick="updateSettings()">Update — Auto Apply</button></div></div>
+<div id="tab-pay" class="card hidden"><h3>Pay to Group / NGO / Company</h3><label>Amount</label><input id="payAmt" type="number" value="1000"><button class="btn btnGreen" onclick="payToGroup()">Pay to Group</button><p class="small" id="payMsg"></p></div>
+</div>
+</div>
+
+<div id="page-owner" class="wrap hidden"><div class="card"><h2>Platform Control</h2><p class="small">Website Owner Only — Hidden</p>
+<div class="grid"><div class="card"><div class="small">Total Groups</div><div class="kpi" id="oGroups">0</div></div><div class="card"><div class="small">Total Members</div><div class="kpi" id="oMembers">0</div></div><div class="card"><div class="small">Total Group Money</div><div class="kpi" id="oMoney">KES 0</div></div></div>
+<h3>Default Price For NEW Groups — Monthly Price</h3><p class="small">Yearly = Monthly x 10 automatically.</p><label>Default Monthly Subscription Price (KES) — For New Groups</label><input id="oPrice" value="500"><label>Announcement</label><textarea id="oAnn"></textarea><button class="btn btnGreen" onclick="saveOwnerSettings()">Save Default Price + Announcement</button><p class="small" id="oMsg"></p>
+<label>Platform Payment Key — SUBSCRIPTION ONLY (Goes to Website Owner — Your Paystack, Your Bank)</label><input id="oPaystack" value="">
+<!-- EDITION BUTTON KEPT - DO NOT REMOVE -->
+<button class="btn btnGreen" onclick="saveOwnerSettings()">Save / Edit Paystack Key — Edit / Update</button><p class="small">Your key is already inside code as default. You can edit it here any time and it will overwrite.</p>
+<label>Support Contact</label><input id="oSupport"><button class="btn btnLine" onclick="saveSupport()">Save Support</button>
+<h3 style="margin-top:16px">All Groups — Trial / Lock / Price Per Group</h3><p class="small">You see Trial Left, Paid Until, Plan (Monthly/Yearly), Locked / Unlocked.</p><div id="oGroupList"></div>
+<button class="btn btnLine" onclick="showPage('home')">Back to Home</button></div></div>
+
+<div class="footer">LOYAL VAULT • SACCO. Chama. NGO. Company. • 7 Days Free Trial, Then Monthly or Yearly.</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB9-k5L0VADciZAM4VHHsCDL3--CkAC4Bs",
+  authDomain: "loyal-vault-6af2b.firebaseapp.com",
+  databaseURL: "https://loyal-vault-6af2b-default-rtdb.firebaseio.com",
+  projectId: "loyal-vault-6af2b",
+  storageBucket: "loyal-vault-6af2b.firebasestorage.app",
+  messagingSenderId: "116217793293",
+  appId: "1:116217793293:web:8d80fb4b21199054043e44",
+  measurementId: "G-RNQD8WYC9F"
+};
+try{ firebase.initializeApp(firebaseConfig); }catch(e){}
+const db=(typeof firebase!=='undefined'&&firebase.database)?firebase.database():{ref:()=>({set:()=>{}})};
+let OWNER_PAYSTACK=localStorage.getItem('lv_platform_key')||"pk_live_316d11dc666099aac26b523c748cd53127aaeae7";
+let DEFAULT_PRICE=Number(localStorage.getItem('lv_price')||500);
+let selectedPlan='Monthly';
+function syncOwnerKey(){let el=document.getElementById('oPaystack'); if(el) el.value=OWNER_PAYSTACK; let p=document.getElementById('oPrice'); if(p) p.value=DEFAULT_PRICE;}
+let groups=JSON.parse(localStorage.getItem('lv_groups')||'[]');
+let usedMpesa=JSON.parse(localStorage.getItem('lv_usedMpesa')||'[]');
+let usedReceipts=JSON.parse(localStorage.getItem('lv_receipts')||'[]');
+let currentGroup=null,isAdmin=false,ownerTaps=0,currentUserName='',currentUserRole='Member';
+function openMenu(){document.getElementById('drawer').classList.add('open')} function closeMenu(){document.getElementById('drawer').classList.remove('open')}
+function showPage(n){['home','about','how','why','features','help','contact','create','signin','dash','owner'].forEach(p=>{let el=document.getElementById('page-'+p); if(el) el.classList.toggle('hidden',p!==n)}); window.scrollTo(0,0)}
+function tab(n,btn){document.querySelectorAll('.navTabs button').forEach(b=>b.classList.remove('active')); if(btn)btn.classList.add('active'); ['savings','loans','shares','receipts','expense','members','cashbook','audit','reports','dividend','admin','pay'].forEach(t=>{document.getElementById('tab-'+t).classList.toggle('hidden',t!==n)})}
+function saveLocal(){localStorage.setItem('lv_groups',JSON.stringify(groups)); localStorage.setItem('lv_usedMpesa',JSON.stringify(usedMpesa)); localStorage.setItem('lv_receipts',JSON.stringify(usedReceipts))}
+function genCode(){return 'LV-'+Math.floor(1000+Math.random()*9000)}
+function ensureFields(g){ g.shares=g.shares||[]; g.fines=g.fines||[]; g.receipts=g.receipts||[]; g.savings=g.savings||[]; g.loans=g.loans||[]; g.expenses=g.expenses||[]; g.trail=g.trail||[]; g.cashbook=g.cashbook||[]; g.repayments=g.repayments||[]; g.sharePrice=g.sharePrice||100; g.dueDay=g.dueDay||5; g.donor=g.donor||''; g.project=g.project||''; g.donors=g.donors||[]; g.projects=g.projects||[]; if(g.subPrice===undefined||g.subPrice===null) g.subPrice=DEFAULT_PRICE; g.subStatus=g.subStatus||'Trial'; g.subPlan=g.subPlan||'Monthly'; if(!g.trialStart) g.trialStart=Date.now(); if(!g.trialEnd) g.trialEnd=g.trialStart+7*24*60*60*1000; if(!g.paidUntil) g.paidUntil=0; if(g.manualLock===undefined) g.manualLock=false; return g;}
+function calcPlanAmount(base, plan){ if(plan==='Yearly') return base*10; return base; }
+function calcPlanDays(plan){ if(plan==='Yearly') return 365; return 30; }
+function calcPlanText(base, plan){ if(plan==='Yearly') return 'Yearly Plan: KES '+base+' x 10 = KES '+(base*10)+' — Unlock 365 days. You SAVE KES '+(base*2)+' (2 months FREE).'; return 'Monthly Plan: KES '+base+' — Unlock 30 days.'; }
+function selectPlan(plan, where){
+  selectedPlan=plan;
+  let base=currentGroup?currentGroup.subPrice:DEFAULT_PRICE;
+  let amt=calcPlanAmount(base, plan);
+  let txt=calcPlanText(base, plan);
+  if(where==='sub'){ document.getElementById('planMonthlyBtn').classList.toggle('active',plan==='Monthly'); document.getElementById('planYearlyBtn').classList.toggle('active',plan==='Yearly'); document.getElementById('subAmt').value=amt; document.getElementById('subPlanText').innerText=txt; }
+  if(where==='lock'){ document.getElementById('lockPlanMonthly').classList.toggle('active',plan==='Monthly'); document.getElementById('lockPlanYearly').classList.toggle('active',plan==='Yearly'); document.getElementById('lockAmt').value=amt; document.getElementById('lockPlanText').innerText=txt; }
+  if(where==='dash'){ document.getElementById('dashPlanMonthly').classList.toggle('active',plan==='Monthly'); document.getElementById('dashPlanYearly').classList.toggle('active',plan==='Yearly'); document.getElementById('dashSubAmt').value=amt; document.getElementById('dashPlanText').innerText=txt; }
+}
+function getTrialInfo(g){
+  g=ensureFields(g); let now=Date.now();
+  if(g.manualLock) return {locked:true, reason:'Locked', daysLeft:0, status:'Locked by Website Owner'};
+  if(g.subStatus==='Paid' && g.paidUntil && now < g.paidUntil){
+    let days=Math.ceil((g.paidUntil-now)/(24*60*60*1000));
+    return {locked:false, reason:'Paid', daysLeft:days, status:'Paid ('+(g.subPlan||'Monthly')+') — '+days+' days left until ' + new Date(g.paidUntil).toLocaleDateString()};
+  }
+  if(now < g.trialEnd){
+    let days=Math.ceil((g.trialEnd-now)/(24*60*60*1000));
+    return {locked:false, reason:'Trial', daysLeft:days, status:'FREE TRIAL — '+days+' days left. Ends '+new Date(g.trialEnd).toLocaleDateString()};
+  }
+  if(g.subStatus==='Paid' && g.paidUntil && now>=g.paidUntil) return {locked:true, reason:'Expired', daysLeft:0, status:'Subscription Expired ('+(g.subPlan||'Monthly')+') — Pay Monthly or Yearly to Unlock'};
+  return {locked:true, reason:'Trial Ended', daysLeft:0, status:'Trial Ended — Pay Monthly or Yearly to Unlock'};
+}
+function isLocked(g){ return getTrialInfo(g).locked; }
+function logTrail(action){ if(!currentGroup) return; currentGroup.trail.push({who:currentUserName||'Admin',role:currentUserRole,action,time:new Date().toLocaleString()}); }
+function addCash(type,who,desc,amountIn,amountOut){ if(!currentGroup) return; let bal=calcAudit(currentGroup).groupBalance; currentGroup.cashbook.push({date:new Date().toLocaleDateString(),who,desc,type,in:amountIn,out:amountOut,bal}); }
+function isNGO(){ return currentGroup && currentGroup.type==='NGO'; }
+function isCompany(){ return currentGroup && currentGroup.type==='Company'; }
+function typeHint(){ let t=document.getElementById('gType').value; let el=document.getElementById('typeHint'); let lblC=document.getElementById('lblCreator'); let lblA=document.getElementById('lblAdminPass');
+let chamaBox=document.getElementById('chamaOnlyFields'); let ngoNote=document.getElementById('ngoCompanyNote');
+let isChama=(t==='Chama'||t==='SACCO'||t==='Circle'||t==='Other');
+if(chamaBox) chamaBox.classList.toggle('hidden',!isChama);
+if(ngoNote) ngoNote.classList.toggle('hidden',isChama);
+if(t==='Company'){ el.innerText='COMPANY MODE: Admin = Company Owner / Director. Accountant records money. No Fine / Interest / Share at registration.'; lblC.innerText='Your Name — Company Owner / Director (You Are Creating This Company) — You Will Be Admin'; lblA.innerText='Admin Password — FULL CONTROL (Admin = Company Owner / Director, NOT Treasurer)'; }
+else if(t==='NGO'){ el.innerText='NGO MODE: Admin = Director. Finance Officer records money. Donations + Grants. Donor will be added AFTER login.'; lblC.innerText='Your Name — NGO Director (You Are Creating This NGO) — You Will Be Admin'; lblA.innerText='Admin Password — FULL CONTROL (Admin = Director, NOT Treasurer)'; }
+else { el.innerText='SACCO / CHAMA MODE: Admin = Chair / Creator. Treasurer is separate.'; lblC.innerText='Your Name — Group Creator / Chair — You Will Be Admin'; lblA.innerText='Admin Password — FULL CONTROL (Admin = Chair / Creator — Treasurer is separate)'; }
+}
+function calcAudit(g){
+  g=ensureFields(g);
+  let contributions=g.savings.filter(s=>s.type!=='Loan Repayment' && s.type!=='Salary').reduce((a,b)=>a+Number(b.amount||0),0);
+  let donations=g.savings.filter(s=>s.type==='Donation'||s.type==='Grant').reduce((a,b)=>a+Number(b.amount||0),0);
+  let clientPay=g.savings.filter(s=>s.type==='Client Payment').reduce((a,b)=>a+Number(b.amount||0),0);
+  let repayments=(g.repayments||[]).reduce((a,b)=>a+Number(b.amount||0),0);
+  let approvedExp=g.expenses.filter(e=>e.status==='Approved').reduce((a,b)=>a+Number(b.amount||0),0);
+  let salaryExp=g.savings.filter(s=>s.type==='Salary').reduce((a,b)=>a+Number(b.amount||0),0);
+  let totalExp=approvedExp+salaryExp;
+  let loansGiven=g.loans.reduce((a,l)=>a+Number(l.amount||0),0);
+  let loanBal=g.loans.reduce((a,l)=>a+Number(l.balance||0),0);
+  let totalInterest=g.loans.reduce((a,l)=>a+Number(l.interest||0),0);
+  if(isNGO()||isCompany()) totalInterest=0;
+  let fines=(g.fines||[]).reduce((a,b)=>a+Number(b.amount||0),0);
+  if(isNGO()||isCompany()) fines=0;
+  let shares=(g.shares||[]).reduce((a,b)=>a+Number(b.amount||0),0);
+  let groupBalance=0;
+  if(isNGO()){ groupBalance=donations+contributions - totalExp; }
+  else if(isCompany()){ groupBalance=contributions+clientPay+donations - totalExp; }
+  else { groupBalance=contributions+fines+repayments-approvedExp-loansGiven; }
+  return {sav:contributions,contributions,repayments,donations,clientPay,exp:approvedExp,salaryExp,totalExp,loanBal,loansGiven,totalInterest,repaid:repayments,fines,shares,groupBalance};
+}
+function autoLoanCalc(){ if(!currentGroup) return; let a=Number(document.getElementById('lnAmt').value||0); if(isNGO()||isCompany()){ document.getElementById('autoLoanPreview').innerText=a?('AUTO: Project = KES '+a+' — NO Interest'):''; return; } let rate=currentGroup.interest||10; let interest=Math.round(a*rate/100); document.getElementById('autoLoanPreview').innerText=a?('AUTO: Amount '+a+' + Interest '+interest+' ('+rate+'%) = Total '+(a+interest)):''; }
+function checkLate(){ if(!currentGroup) return ''; if(isNGO()||isCompany()) return 'AUTO: NGO / Company — No Late Fine.'; let today=new Date(); let due=currentGroup.dueDay||5; if(today.getDate()>due && currentGroup.fine>0) return 'AUTO: Today '+today.getDate()+' — Due was '+due+'. Late members owe Fine KES '+currentGroup.fine; return 'AUTO: Due day '+due+'. Today '+today.getDate()+'. On time.'; }
+function createGroup(){
+let name=document.getElementById('gName').value.trim(),type=document.getElementById('gType').value,owner=document.getElementById('gOwner').value.trim(),phone=document.getElementById('gPhone').value.trim(),pass=document.getElementById('gPass').value,adminPass=document.getElementById('gAdminPass').value,amt=Number(document.getElementById('gAmount').value||0),freq=document.getElementById('gFreq').value,fine=Number(document.getElementById('gFine')?document.getElementById('gFine').value||0:0),interest=Number(document.getElementById('gInterest')?document.getElementById('gInterest').value||10:10),sp=Number(document.getElementById('gSharePrice')?document.getElementById('gSharePrice').value||100:100),due=Number(document.getElementById('gDueDay')?document.getElementById('gDueDay').value||5:5),donor='',project='';
+if(type==='NGO'){ interest=0; fine=0; } if(type==='Company'){ fine=0; }
+if(!name||!owner||!pass||!adminPass){document.getElementById('createMsg').innerText='Fill Group Name, Your Name, Group Password AND Admin Password.';return}
+let adminRole=type==='Company'?'Admin (Company Owner)':type==='NGO'?'Admin (Director)':'Admin (Chair)';
+let now=Date.now();
+let g=ensureFields({code:genCode(),name,type,owner,phone,pass,adminPass,contrib:amt,freq,fine,interest,sharePrice:sp,dueDay:due,donor,project,donors:[],projects:[],subPrice:DEFAULT_PRICE,subStatus:'Trial',subPlan:'Monthly',trialStart:now,trialEnd:now+7*24*60*60*1000,paidUntil:0,manualLock:false,groupPaystack:'',savings:[],loans:[],expenses:[],members:[{name:owner,phone,role:adminRole}],receipts:[],created:now});
+groups.push(g); saveLocal(); try{db.ref('groups/'+g.code).set(g);}catch(e){}
+document.getElementById('createMsg').innerHTML='Group created! Type <b>'+type+'</b> Code <b>'+g.code+'</b>. You are <b>'+adminRole+'</b>.<br><b>7-DAY FREE TRIAL STARTED</b> — Ends '+new Date(g.trialEnd).toLocaleDateString()+'. After trial, pay Monthly KES '+g.subPrice+' or Yearly KES '+(g.subPrice*10)+' (Save 2 months).';
+document.getElementById('subPriceText').innerText='Your group monthly price is KES '+g.subPrice+' — Yearly is KES '+(g.subPrice*10)+' (Save 2 months).';
+selectPlan('Monthly','sub');
+document.getElementById('subPayBox').classList.remove('hidden'); currentGroup=g; isAdmin=true; currentUserName=owner; currentUserRole=adminRole; logTrail('Created group '+g.name+' type '+type+' as '+adminRole+' — Trial started'); saveLocal();
+}
+function addDonor(){ if(!currentGroup||!isAdmin) return alert('Only Admin'); let n=document.getElementById('donorName').value.trim(); let a=Number(document.getElementById('donorAmt').value||0); if(!n) return alert('Enter donor name'); currentGroup.donors.push({name:n,amount:a,at:Date.now()}); logTrail('Added Donor '+n+' KES '+a); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} document.getElementById('donorName').value=''; document.getElementById('donorAmt').value=''; renderDash(); alert('Donor added!'); }
+function addProject(){ if(!currentGroup||!isAdmin) return alert('Only Admin'); let n=document.getElementById('projName').value.trim(); if(!n) return alert('Enter project name'); currentGroup.projects.push({name:n,at:Date.now()}); logTrail('Added Project '+n); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} document.getElementById('projName').value=''; renderDash(); alert('Project added!'); }
+function doPaySubscription(amount, plan, onSuccessMsgElId){
+  amount=Number(amount||(currentGroup?calcPlanAmount(currentGroup.subPrice, plan):DEFAULT_PRICE));
+  plan=plan||selectedPlan;
+  let days=calcPlanDays(plan);
+  if(!OWNER_PAYSTACK){ let el=document.getElementById(onSuccessMsgElId); if(el) el.innerText='Platform payment not configured. Contact Support.'; return; }
+  let h=PaystackPop.setup({key:OWNER_PAYSTACK,email:'member@loyalvault.com',amount:amount*100,currency:'KES',callback:function(r){
+    if(currentGroup){
+      currentGroup.subStatus='Paid';
+      currentGroup.subPlan=plan;
+      currentGroup.subPrice=currentGroup.subPrice;
+      currentGroup.paidUntil=Date.now()+days*24*60*60*1000;
+      currentGroup.manualLock=false;
+      saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){}
+      logTrail('Subscription paid '+plan+' KES '+amount+' Ref '+r.reference+' — AUTO UNLOCKED for '+days+' days'); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){}
+    }
+    let el=document.getElementById(onSuccessMsgElId); if(el) el.innerText='Payment Successful '+plan+' KES '+amount+'. Ref: '+r.reference+' — UNLOCKED for '+days+' days!';
+    setTimeout(()=>{ if(currentGroup) openDash(); }, 1200);
+  },onClose:function(){ let el=document.getElementById(onSuccessMsgElId); if(el) el.innerText='Payment window closed. Group still locked until you pay.'; }});
+  h.openIframe();
+}
+function paySubscription(){ doPaySubscription(document.getElementById('subAmt').value, selectedPlan, 'subMsg'); }
+function payFromLock(){ doPaySubscription(document.getElementById('lockAmt').value, selectedPlan, 'lockMsg'); }
+function payFromDashboard(){ doPaySubscription(document.getElementById('dashSubAmt').value, selectedPlan, 'dashPayMsg'); }
+function signIn(){
+let code=document.getElementById('sCode').value.trim().toUpperCase(),pass=document.getElementById('sPass').value,name=document.getElementById('sName').value.trim(),role=document.getElementById('sRole').value;
+let g=groups.find(x=>x.code===code); if(!g){document.getElementById('signMsg').innerText='Wrong code.';return} g=ensureFields(g);
+if(pass===g.adminPass){isAdmin=true} else if(pass===g.pass){isAdmin=false} else {document.getElementById('signMsg').innerText='Wrong password.';return}
+currentUserName=name||'Member'; currentUserRole=role;
+if(name && !g.members.find(m=>m.name.toLowerCase()===name.toLowerCase())){g.members.push({name,phone:'',role}); logTrail('New member joined: '+name+' as '+role); saveLocal(); try{db.ref('groups/'+g.code).set(g);}catch(e){}}
+currentGroup=g; openDash();
+}
+function openDash(){
+if(!currentGroup) return; currentGroup=ensureFields(currentGroup);
+let trial=getTrialInfo(currentGroup);
+showPage('dash');
+if(trial.locked){
+  document.getElementById('lockScreen').classList.remove('hidden');
+  document.getElementById('dashMain').classList.add('hidden');
+  document.getElementById('lockText').innerText=currentGroup.name+' ('+currentGroup.type+') — '+trial.status+' — Monthly KES '+currentGroup.subPrice+' / Yearly KES '+(currentGroup.subPrice*10);
+  selectPlan('Monthly','lock');
+  return;
+}
+document.getElementById('lockScreen').classList.add('hidden');
+document.getElementById('dashMain').classList.remove('hidden');
+document.getElementById('dashTitle').innerText=currentGroup.name;
+let donorTxt=(currentGroup.donors&&currentGroup.donors.length)? currentGroup.donors.map(d=>d.name).join(', ') : (currentGroup.donor||'-');
+let projTxt=(currentGroup.projects&&currentGroup.projects.length)? currentGroup.projects.map(p=>p.name).join(', ') : (currentGroup.project||'-');
+document.getElementById('dashSub').innerText=currentGroup.type+' • Code: '+currentGroup.code+' • Creator/Admin: '+currentGroup.owner+' • Donors: '+donorTxt+' • Projects: '+projTxt;
+if(isNGO()) document.getElementById('modeInfo').innerText='MODE: NGO — Admin = Director. Finance Officer records.';
+else if(isCompany()) document.getElementById('modeInfo').innerText='MODE: COMPANY — Admin = Company Owner / Director. Accountant records.';
+else document.getElementById('modeInfo').innerText='MODE: SACCO / CHAMA — Admin = Chair / Creator. Treasurer records.';
+document.getElementById('subInfo').innerText='Subscription for THIS group: Monthly KES '+currentGroup.subPrice+' / Yearly KES '+(currentGroup.subPrice*10)+' — Status: '+trial.status;
+document.getElementById('trialInfo').innerText=trial.reason==='Trial' ? '⏳ FREE TRIAL: '+trial.daysLeft+' days left. After trial, system will LOCK automatically. Pay Monthly or Yearly now to extend.' : trial.reason==='Paid' ? '✅ PAID ('+(currentGroup.subPlan||'Monthly')+'): '+trial.daysLeft+' days left. After this, system will LOCK automatically. Pay again to unlock.' : '';
+document.getElementById('subBanner').innerText=trial.reason==='Trial' ? 'You are on FREE TRIAL — '+trial.daysLeft+' days left. Pay Monthly KES '+currentGroup.subPrice+' (30 days) or Yearly KES '+(currentGroup.subPrice*10)+' (365 days, Save 2 months).' : 'Paid ('+(currentGroup.subPlan||'Monthly')+') — '+trial.daysLeft+' days left. Pay Monthly or Yearly to extend.';
+selectPlan('Monthly','dash');
+document.getElementById('dashRole').innerHTML=isAdmin?'<span class="green">You are '+currentUserRole+' / ADMIN — Full Control</span>':'<span class="red">You are '+currentUserRole+' — View Only.</span>';
+document.getElementById('contInfo').innerText=isNGO()?'NGO: Record Donation / Grant here.':isCompany()?'Company: Record Capital / Client Payment here.':'AUTO: Contribution KES '+currentGroup.contrib+' '+currentGroup.freq+' | Interest '+currentGroup.interest+'% | Fine KES '+currentGroup.fine;
+document.getElementById('lateInfo').innerText=checkLate();
+document.getElementById('sharePriceInfo').innerText=isNGO()?'NGO: Shares not used.':'Share / Capital Price: KES '+currentGroup.sharePrice;
+document.getElementById('savTitle').innerText=isNGO()?'Record Donation / Grant':isCompany()?'Record Capital / Client Payment':'Record Contribution / Saving';
+document.getElementById('loanTitle').innerText=isNGO()?'Project Request (NGO)':isCompany()?'Project / Invoice Request (Company)':'Loan Application — Auto Interest';
+document.getElementById('shareTitle').innerText=isNGO()?'Shares — NOT USED FOR NGO':isCompany()?'Capital Ledger — Company':'Shares Ledger — SACCO';
+document.getElementById('divTitle').innerText=isNGO()?'Donor Balance — NGO Has NO Dividend':isCompany()?'Profit Share — Company':'Dividend — SACCO';
+document.getElementById('adminLock').innerText=isAdmin?'Welcome Admin.':'LOCKED: Only Admin Password opens this section.';
+document.getElementById('adminContent').classList.toggle('hidden',!isAdmin);
+document.getElementById('groupPaystack').value=currentGroup.groupPaystack||'';
+document.getElementById('setContrib').value=currentGroup.contrib; document.getElementById('setFreq').value=currentGroup.freq; document.getElementById('setInterest').value=currentGroup.interest; document.getElementById('setFine').value=currentGroup.fine; document.getElementById('setSharePrice').value=currentGroup.sharePrice; document.getElementById('setDueDay').value=currentGroup.dueDay;
+renderDash();
+}
+function renderDash(){
+if(!currentGroup) return; let g=ensureFields(currentGroup); let a=calcAudit(g);
+if(isLocked(g)) return;
+document.getElementById('kSav').innerText='KES '+(isNGO()? (a.donations+a.contributions): isCompany()? (a.contributions+a.clientPay): a.contributions).toLocaleString();
+document.getElementById('kSavLabel').innerText=isNGO()?'Total Donations / Grants':isCompany()?'Total Capital + Client Payments':'Total Contributions';
+document.getElementById('kLoan').innerText='KES '+a.loanBal.toLocaleString();
+document.getElementById('kLoanLabel').innerText=isNGO()?'Projects Balance':isCompany()?'Projects / Invoices Balance':'Loans Out';
+document.getElementById('kBal').innerText='KES '+a.groupBalance.toLocaleString();
+document.getElementById('kFine').innerText='KES '+(isNGO()? a.donations: isCompany()? a.clientPay: a.fines).toLocaleString();
+document.getElementById('kShare').innerText=a.shares.toLocaleString();
+document.getElementById('kMem').innerText=g.members.length;
+if(isNGO()) document.getElementById('auditLine').innerText='AUTO NGO AUDIT: Cash = Donations '+a.donations+' + Other '+a.contributions+' - Expenses '+a.totalExp+' = Cash '+a.groupBalance;
+else if(isCompany()) document.getElementById('auditLine').innerText='AUTO COMPANY AUDIT: Cash = Capital '+a.contributions+' + Client '+a.clientPay+' - Expenses '+a.totalExp+' = Cash '+a.groupBalance;
+else document.getElementById('auditLine').innerText='AUTO SACCO AUDIT: Cash = Contributions '+a.contributions+' + Fines '+a.fines+' + Repayments '+a.repayments+' - Expenses '+a.exp+' - Loans Given '+a.loansGiven+' = Cash '+a.groupBalance;
+document.getElementById('autoNote').innerText='✓ AUTO: Correct formula for '+g.type+'. No double count.';
+document.getElementById('svList').innerHTML=g.savings.filter(s=>s.type!=='Loan Repayment').map(s=>'<p class="small">'+s.name+' — KES '+s.amount+' — '+s.code+' — '+(s.type||'Saving')+'</p>').join('')||'<p class="small">No income yet.</p>';
+document.getElementById('lnList').innerHTML=g.loans.map(l=>'<p class="small">'+l.name+' — Amount '+l.amount+' — Interest '+(isNGO()||isCompany()?0:l.interest)+' — Paid '+l.paid+' — Balance '+l.balance+' — Status '+l.status+'</p>').join('')||'<p class="small">No loans / projects yet.</p>';
+document.getElementById('shList').innerHTML=isNGO()?'<p class="small">NGO does not use Shares.</p>':g.shares.map(s=>'<p class="small">'+s.name+' — '+s.amount+' shares/capital = AUTO KES '+(s.amount*g.sharePrice)+'</p>').join('')||'<p class="small">No shares yet.</p>';
+document.getElementById('rcList').innerHTML=g.receipts.map(r=>'<p class="small"><span class="pill" style="background:#E6F4EB;color:#0B6B3A">'+r.type+'</span> '+r.name+' — KES '+r.amount+' — '+r.date+' — '+(r.mpesa||'')+'</p>').join('')||'<p class="small">No receipts yet.</p>';
+document.getElementById('exList').innerHTML=g.expenses.filter(e=>e.status==='Approved').map(s=>'<p class="small">APPROVED: '+s.what+' — KES '+s.amount+' — By '+s.by+'</p>').join('')||'<p class="small">No approved expenses yet.</p>';
+document.getElementById('exPending').innerHTML='<h3>Pending (NOT counted)</h3>'+ (g.expenses.filter(e=>e.status!=='Approved').map(s=>'<p class="small">'+s.what+' — KES '+s.amount+' — By '+s.by+'</p>').join('')||'<p class="small">No pending.</p>');
+document.getElementById('memList').innerHTML=g.members.map(m=>{
+let ms=g.savings.filter(s=>s.name.toLowerCase()===m.name.toLowerCase() && s.type!=='Loan Repayment').reduce((a,b)=>a+Number(b.amount||0),0);
+let ml=g.loans.filter(l=>l.name.toLowerCase().includes(m.name.toLowerCase())).reduce((a,b)=>a+Number(b.balance||0),0);
+let msh=g.shares.filter(s=>s.name.toLowerCase()===m.name.toLowerCase()).reduce((a,b)=>a+Number(b.amount||0),0);
+return '<p class="small"><b>'+m.name+'</b> — Role: '+(m.role||'Member')+' — Total In KES '+ms+' — Shares/Capital '+msh+' — Loan Balance KES '+ml+'</p>';
+}).join('');
+document.getElementById('cashList').innerHTML=g.cashbook.length?('<table><tr><th>Date</th><th>Who</th><th>Description</th><th>In</th><th>Out</th><th>Balance</th></tr>'+g.cashbook.map(c=>'<tr><td>'+c.date+'</td><td>'+c.who+'</td><td>'+c.desc+'</td><td>'+c.in+'</td><td>'+c.out+'</td><td>'+c.bal+'</td></tr>').join('')+'</table>'):'<p class="small">No cashbook yet.</p>';
+document.getElementById('trailList').innerHTML=g.trail.map(t=>'<p class="small">'+t.time+' — '+t.who+' ('+t.role+'): '+t.action+'</p>').join('')||'<p class="small">No trail yet.</p>';
+if(isNGO()){ document.getElementById('repText').innerText='NGO REPORT — '+g.name+' | Donor: '+(g.donors.map(d=>d.name).join(', ')||g.donor||'-')+' | Donations: KES '+a.donations+' | Expenses: KES '+a.totalExp+' | Cash: KES '+a.groupBalance; document.getElementById('trialText').innerText='NGO TRIAL: Donations '+(a.donations+a.contributions)+' = Expenses '+a.totalExp+' + Cash '+a.groupBalance+' + Projects '+a.loanBal; document.getElementById('incomeText').innerText='NGO INCOME: Donations '+a.donations+' - Expenses '+a.totalExp+' = Surplus '+(a.donations-a.totalExp); document.getElementById('balanceText').innerText='NGO BALANCE: Assets = Cash '+a.groupBalance+' + Projects '+a.loanBal+' | Donations '+a.donations; document.getElementById('ngoText').innerText='DONOR REPORT: Donor gave '+a.donations+', Spent '+a.totalExp+', Remaining '+a.groupBalance; }
+else if(isCompany()){ document.getElementById('repText').innerText='COMPANY REPORT — '+g.name+' | Capital: KES '+a.contributions+' | Client: KES '+a.clientPay+' | Expenses: KES '+a.totalExp+' | Cash: KES '+a.groupBalance; document.getElementById('trialText').innerText='COMPANY TRIAL: Income '+(a.contributions+a.clientPay)+' = Expenses '+a.totalExp+' + Cash '+a.groupBalance; document.getElementById('incomeText').innerText='COMPANY PROFIT: Client '+a.clientPay+' + Capital '+a.contributions+' - Expenses '+a.totalExp+' = '+(a.contributions+a.clientPay-a.totalExp); document.getElementById('balanceText').innerText='COMPANY BALANCE: Assets = Cash '+a.groupBalance+' + Receivables '+a.loanBal; document.getElementById('ngoText').innerText=''; }
+else { document.getElementById('repText').innerText='SACCO REPORT — '+g.name+' | Contributions: KES '+a.contributions+' | Repayments: KES '+a.repayments+' | Loans Given: KES '+a.loansGiven+' | Loans Balance: KES '+a.loanBal+' | Expenses: KES '+a.exp+' | Fines: KES '+a.fines+' | Cash: KES '+a.groupBalance; document.getElementById('trialText').innerText='SACCO TRIAL: Debits (Expenses '+a.exp+' + Loans '+a.loanBal+' + Cash '+a.groupBalance+') = '+(a.exp+a.loanBal+a.groupBalance); document.getElementById('incomeText').innerText='SACCO INCOME: Interest '+a.totalInterest+' + Fines '+a.fines+' = '+(a.totalInterest+a.fines)+' | Expenditure = '+a.exp+' | Surplus = '+(a.totalInterest+a.fines-a.exp); document.getElementById('balanceText').innerText='SACCO BALANCE: Assets = Cash '+a.groupBalance+' + Loans Owed '+a.loanBal+' = '+(a.groupBalance+a.loanBal); document.getElementById('ngoText').innerText=''; }
+document.getElementById('approveList').innerHTML=g.loans.map((l,i)=>'<p class="small">'+l.name+' — KES '+l.amount+' — '+l.status+' <button onclick="approveLoan('+i+')">Approve</button> <button onclick="rejectLoan('+i+')">Reject</button></p>').join('')||'<p class="small">No applications.</p>';
+document.getElementById('approveExpList').innerHTML=g.expenses.filter(e=>e.status!=='Approved').map((e,i)=>{let idx=g.expenses.indexOf(e); return '<p class="small">'+e.what+' — KES '+e.amount+' — By '+e.by+' <button onclick="approveExpense('+idx+')">Approve (Admin)</button></p>'}).join('')||'<p class="small">No pending.</p>';
+if(document.getElementById('donorList')) document.getElementById('donorList').innerHTML=(g.donors||[]).map(d=>'<p>• '+d.name+' — KES '+d.amount+'</p>').join('')||'No donors yet. Add when you get one.';
+if(document.getElementById('projList')) document.getElementById('projList').innerHTML=(g.projects||[]).map(p=>'<p>• '+p.name+'</p>').join('')||'No projects yet. Add when you start one.';
+}
+function recordSaving(){
+if(isLocked(currentGroup)){alert('Group Locked — Pay Subscription to Unlock.'); return;}
+if(!isAdmin){document.getElementById('svMsg').innerText='Only Admin / Treasurer / Accountant.';return}
+let name=document.getElementById('svName').value.trim(),amt=Number(document.getElementById('svAmt').value),code=document.getElementById('svCode').value.trim().toUpperCase();
+if(!name||!amt||!code){document.getElementById('svMsg').innerText='Fill all.';return}
+if(!/^[A-Z0-9]{10}$/.test(code)){document.getElementById('svMsg').innerText='REJECTED: M-Pesa format wrong.';return}
+if(usedMpesa.includes(code)){document.getElementById('svMsg').innerText='REJECTED: M-Pesa already used.';return}
+usedMpesa.push(code); let type=isNGO()?'Donation':isCompany()?'Client Payment':'Saving'; currentGroup.savings.push({name,amount:amt,code,type,time:Date.now()}); logTrail('Recorded '+type+' KES '+amt+' for '+name); addCash('In',currentUserName,type+' - '+name,amt,0); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} document.getElementById('svMsg').innerText='Accepted — AUTO.'; renderDash();
+}
+function applyLoan(){
+if(isLocked(currentGroup)){alert('Group Locked — Pay Subscription.'); return;}
+let n=document.getElementById('lnName').value.trim(),a=Number(document.getElementById('lnAmt').value),pur=document.getElementById('lnPurpose').value,mo=Number(document.getElementById('lnMonths').value||6),inc=document.getElementById('lnIncome').value,g1=document.getElementById('lnG1').value,g2=document.getElementById('lnG2').value,coll=document.getElementById('lnColl').value;
+if(!n||!a||!g1||!g2){document.getElementById('lnMsg').innerText='Fill Name, Amount, AND 2 Guarantors/Supervisors.';return}
+let interest=(isNGO()||isCompany())?0:Math.round(a*currentGroup.interest/100);
+currentGroup.loans.push({name:n,amount:a,purpose:pur,months:mo,income:inc,g1,g2,coll,interest,paid:0,balance:a+interest,status:'Pending'}); logTrail('Application KES '+a+' by '+n); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} document.getElementById('lnMsg').innerText='AUTO: Sent. Total '+(a+interest)+' waiting approval.'; renderDash();
+}
+function approveLoan(i){if(!isAdmin) return; currentGroup.loans[i].status='Approved'; logTrail('Approved for '+currentGroup.loans[i].name); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} renderDash()}
+function rejectLoan(i){if(!isAdmin) return; currentGroup.loans[i].status='Rejected'; logTrail('Rejected for '+currentGroup.loans[i].name); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} renderDash()}
+function addShare(){ if(isLocked(currentGroup)){alert('Group Locked — Pay Subscription.'); return;} if(!isAdmin) return; if(isNGO()){alert('NGO does not use Shares. Use Donation.'); return;} let n=document.getElementById('shName').value, a=Number(document.getElementById('shAmt').value); if(!n||!a) return; currentGroup.shares.push({name:n, amount:a}); logTrail('Added '+a+' shares for '+n); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} renderDash(); }
+function repayLoan(){
+if(isLocked(currentGroup)){alert('Group Locked — Pay Subscription.'); return;}
+if(!isAdmin){document.getElementById('rpMsg').innerText='Only Admin / Treasurer / Accountant.';return}
+let name=document.getElementById('rpName').value.trim(), amt=Number(document.getElementById('rpAmt').value), code=document.getElementById('rpCode').value.trim().toUpperCase();
+if(!name||!amt){document.getElementById('rpMsg').innerText='Fill name and amount.';return}
+let loan=currentGroup.loans.find(l=>l.name.toLowerCase().includes(name.toLowerCase()) && l.status!=='Rejected' && Number(l.balance)>0);
+if(!loan){document.getElementById('rpMsg').innerText='No active loan/project for '+name;return}
+if(code && usedMpesa.includes(code)){document.getElementById('rpMsg').innerText='REJECTED: M-Pesa already used.';return}
+if(code) usedMpesa.push(code);
+loan.paid=Number(loan.paid||0)+amt; loan.balance=Math.max(0, Number(loan.balance)-amt); if(loan.balance===0) loan.status='Fully Paid';
+currentGroup.repayments.push({name,amount:amt,code:code||'REPAY',time:Date.now()});
+logTrail('Repayment KES '+amt+' by '+name+' — New balance '+loan.balance); addCash('In',currentUserName,'Repayment - '+name,amt,0); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} document.getElementById('rpMsg').innerText='AUTO: New balance KES '+loan.balance; renderDash();
+}
+function addOldLoan(){
+if(!isAdmin) return; let name=document.getElementById('oldName').value,amt=Number(document.getElementById('oldAmt').value),paid=Number(document.getElementById('oldPaid').value||0),rate=Number(document.getElementById('oldRate').value||currentGroup.interest),date=document.getElementById('oldDate').value;
+if(!name||!amt){document.getElementById('oldMsg').innerText='Fill name and amount.';return}
+let interest=(isNGO()||isCompany())?0:Math.round(amt*rate/100); let bal=amt+interest-paid;
+currentGroup.loans.push({name,amount:amt,purpose:'Old Loan',months:6,income:'Old',g1:'Old',g2:'Old',coll:'Old',interest,paid,balance:bal,status:'Approved — Old Loan',oldDate:date}); if(paid>0) currentGroup.repayments.push({name,amount:paid,code:'OLD',time:Date.now()}); logTrail('Added old loan KES '+amt+' for '+name); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} document.getElementById('oldMsg').innerText='AUTO: Balance KES '+bal; renderDash();
+}
+function scanReceipt(){
+if(isLocked(currentGroup)){alert('Group Locked — Pay Subscription.'); return;}
+if(!isAdmin){document.getElementById('rcMsg').innerText='Only Admin / Treasurer / Accountant.';return}
+let type=document.getElementById('rcType').value, amt=Number(document.getElementById('rcAmt').value),date=document.getElementById('rcDate').value,name=document.getElementById('rcName').value.trim(),mpesa=document.getElementById('rcMpesa').value.trim().toUpperCase();
+if(!amt||!date||!name){document.getElementById('rcMsg').innerText='REJECTED: Must have Amount, Date, Name.';return}
+let key=name+'|'+amt+'|'+date+'|'+type;
+if(usedReceipts.includes(key)){document.getElementById('rcMsg').innerText='REJECTED: DUPLICATE receipt.';return}
+let memberExists=currentGroup.members.some(m=>m.name.toLowerCase()===name.toLowerCase());
+if(!memberExists && type!=='Donation' && type!=='Grant' && type!=='Client Payment'){document.getElementById('rcMsg').innerText='REJECTED: Name does NOT match member.';return}
+let d=new Date(date); if(d>new Date()){document.getElementById('rcMsg').innerText='REJECTED: Future date — Fake.';return}
+if(mpesa && !/^[A-Z0-9]{10}$/.test(mpesa)){document.getElementById('rcMsg').innerText='REJECTED: M-Pesa format wrong.';return}
+if(mpesa && usedMpesa.includes(mpesa)){document.getElementById('rcMsg').innerText='REJECTED: M-Pesa already used.';return}
+if(mpesa) usedMpesa.push(mpesa);
+usedReceipts.push(key);
+currentGroup.receipts.push({name,amount:amt,date,type,mpesa:mpesa||''});
+if(type==='Loan Repayment'){
+  let loan=currentGroup.loans.find(l=>l.name.toLowerCase().includes(name.toLowerCase()) && l.status!=='Rejected' && Number(l.balance)>0);
+  if(!loan){document.getElementById('rcMsg').innerText='REJECTED: No active loan for '+name; usedReceipts.pop(); if(mpesa) usedMpesa.pop(); return;}
+  loan.paid=Number(loan.paid||0)+amt; loan.balance=Math.max(0, Number(loan.balance)-amt); if(loan.balance===0) loan.status='Fully Paid';
+  currentGroup.repayments.push({name,amount:amt,code:mpesa||'RECEIPT',time:Date.now()});
+  logTrail('Receipt Loan Repayment KES '+amt+' for '+name); addCash('In',currentUserName,'Loan Repayment - '+name,amt,0);
+  document.getElementById('rcMsg').innerText='AUTO ACCEPTED: Loan Repayment — New balance KES '+loan.balance;
+} else if(type==='Fine'){
+  if(isNGO()||isCompany()){document.getElementById('rcMsg').innerText='REJECTED: NGO/Company has NO Fines.'; usedReceipts.pop(); return;}
+  currentGroup.fines.push({name,amount:amt,date}); logTrail('Receipt Fine KES '+amt+' for '+name); addCash('In',currentUserName,'Fine - '+name,amt,0);
+  document.getElementById('rcMsg').innerText='AUTO ACCEPTED: Fine KES '+amt;
+} else if(type==='Shares'){
+  if(isNGO()){document.getElementById('rcMsg').innerText='REJECTED: NGO has NO Shares.'; usedReceipts.pop(); return;}
+  currentGroup.shares.push({name,amount:amt}); logTrail('Receipt Shares '+amt+' for '+name); addCash('In',currentUserName,'Shares - '+name,amt,0);
+  document.getElementById('rcMsg').innerText='AUTO ACCEPTED: Shares '+amt;
+} else if(type==='Salary'){
+  currentGroup.savings.push({name,amount:amt,code:mpesa||'SALARY',type:'Salary',time:Date.now()}); logTrail('Salary KES '+amt+' for '+name); addCash('Out',currentUserName,'Salary - '+name,0,amt);
+  document.getElementById('rcMsg').innerText='AUTO ACCEPTED: Salary KES '+amt+' — Expense';
+} else {
+  currentGroup.savings.push({name,amount:amt,code:mpesa||'RECEIPT',type:type,time:Date.now()}); logTrail('Receipt '+type+' KES '+amt+' for '+name); addCash('In',currentUserName,type+' - '+name,amt,0);
+  document.getElementById('rcMsg').innerText='AUTO ACCEPTED: '+type+' KES '+amt;
+}
+saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} renderDash();
+}
+function addExpense(){if(isLocked(currentGroup)){alert('Group Locked — Pay Subscription.'); return;} if(!isAdmin) return; let w=document.getElementById('exWhat').value,a=Number(document.getElementById('exAmt').value),by=document.getElementById('exBy').value||currentUserName; if(!w||!a) return; currentGroup.expenses.push({what:w,amount:a,by,status:'Pending'}); logTrail('Proposed expense KES '+a+' for '+w); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} document.getElementById('exMsg').innerText='Proposed. Waiting Admin approval.'; renderDash()}
+function approveExpense(idx){ if(!isAdmin) return; currentGroup.expenses[idx].status='Approved'; logTrail('Approved expense KES '+currentGroup.expenses[idx].amount); addCash('Out',currentUserName,'Expense - '+currentGroup.expenses[idx].what,0,currentGroup.expenses[idx].amount); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} renderDash(); }
+function addMember(){ if(!isAdmin) return; let n=document.getElementById('newMemName').value.trim(), r=document.getElementById('newMemRole').value; if(!n) return; if(currentGroup.members.find(m=>m.name.toLowerCase()===n.toLowerCase())){alert('Member already exists'); return;} currentGroup.members.push({name:n,phone:'',role:r}); logTrail('Added member '+n+' as '+r); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} renderDash(); }
+function calcExit(){ let name=document.getElementById('exitName').value.trim(); if(!name){document.getElementById('exitMsg').innerText='Enter name';return} if(isNGO()){document.getElementById('exitMsg').innerText='NGO: No Exit Payout. Donations are not refunded.'; return;} let g=currentGroup; let ms=g.savings.filter(s=>s.name.toLowerCase()===name.toLowerCase() && s.type!=='Loan Repayment' && s.type!=='Salary').reduce((a,b)=>a+Number(b.amount||0),0); let msh=g.shares.filter(s=>s.name.toLowerCase()===name.toLowerCase()).reduce((a,b)=>a+Number(b.amount||0),0); let ml=g.loans.filter(l=>l.name.toLowerCase().includes(name.toLowerCase())).reduce((a,b)=>a+Number(b.balance||0),0); let payout=ms + (msh*g.sharePrice) - ml; document.getElementById('exitMsg').innerText='AUTO EXIT: Savings KES '+ms+' + Shares KES '+(msh*g.sharePrice)+' - Loan KES '+ml+' = PAY KES '+payout; }
+function calcDividend(){ let profit=Number(document.getElementById('divProfit').value||0); let g=currentGroup; if(isNGO()){ document.getElementById('divMsg').innerText='NGO HAS NO DIVIDEND. Donor Balance = '+(calcAudit(g).donations - calcAudit(g).totalExp); document.getElementById('divList').innerHTML='<p class="small">Show Donor Report in Reports tab.</p>'; return; } let totalShares=g.shares.reduce((a,b)=>a+Number(b.amount||0),0); if(totalShares===0){document.getElementById('divMsg').innerText='No shares yet.';return} let perShare=profit/totalShares; document.getElementById('divMsg').innerText='AUTO: Profit KES '+profit+' / Shares '+totalShares+' = KES '+perShare.toFixed(2)+' per share'; let perMember={}; g.shares.forEach(s=>{ perMember[s.name]=(perMember[s.name]||0)+Number(s.amount); }); document.getElementById('divList').innerHTML=Object.keys(perMember).map(n=>'<p class="small">'+n+' — Shares '+perMember[n]+' — Dividend KES '+(perMember[n]*perShare).toFixed(2)+'</p>').join(''); }
+function exportCSV(){
+if(!currentGroup) return; if(isLocked(currentGroup)){alert('Group Locked — Pay Subscription to download.'); return;} let g=currentGroup; let rows=[['Type','Name','Amount','Date','Status','Details','Group Type','Sub Price','Sub Plan']];
+g.savings.forEach(s=>rows.push(['Saving/'+s.type,s.name,s.amount,new Date(s.time||Date.now()).toLocaleDateString(),s.type||'',s.code||'',g.type,g.subPrice,g.subPlan]));
+g.repayments.forEach(s=>rows.push(['Loan Repayment',s.name,s.amount,new Date(s.time||Date.now()).toLocaleDateString(),'Auto','',g.type,g.subPrice,g.subPlan]));
+g.loans.forEach(l=>rows.push(['Loan/Project',l.name,l.amount,'',l.status,'Balance '+l.balance,g.type,g.subPrice,g.subPlan]));
+g.expenses.forEach(e=>rows.push(['Expense',e.by||'',e.amount,'',e.status,e.what,g.type,g.subPrice,g.subPlan]));
+g.receipts.forEach(r=>rows.push(['Receipt '+r.type,r.name,r.amount,r.date,'Verified',r.mpesa||'',g.type,g.subPrice,g.subPlan]));
+g.trail.forEach(t=>rows.push(['Audit Trail',t.who+' '+t.role,t.action,t.time,'Auto','',g.type,g.subPrice,g.subPlan]));
+let csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+let blob=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=g.name+'-'+g.type+'-LOYAL-VAULT.csv'; a.click();
+}
+function saveGroupPaystack(){if(!isAdmin) return; currentGroup.groupPaystack=document.getElementById('groupPaystack').value.trim(); logTrail('Updated group payment key'); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} alert('Group Payment Key saved.')}
+function updateSettings(){if(!isAdmin) return; currentGroup.contrib=Number(document.getElementById('setContrib').value||currentGroup.contrib); currentGroup.freq=document.getElementById('setFreq').value; currentGroup.interest=Number(document.getElementById('setInterest').value||currentGroup.interest); currentGroup.fine=Number(document.getElementById('setFine').value||0); currentGroup.sharePrice=Number(document.getElementById('setSharePrice').value||currentGroup.sharePrice); currentGroup.dueDay=Number(document.getElementById('setDueDay').value||5); if(isNGO()){currentGroup.interest=0; currentGroup.fine=0;} if(isCompany()){currentGroup.fine=0;} logTrail('Updated settings'); saveLocal(); try{db.ref('groups/'+currentGroup.code).set(currentGroup);}catch(e){} alert('Settings updated.'); openDash()}
+function payToGroup(){ if(isLocked(currentGroup)){alert('Group Locked — Pay Subscription first.'); return;} let amt=Number(document.getElementById('payAmt').value||0); if(!amt){document.getElementById('payMsg').innerText='Enter amount.';return} if(!currentGroup.groupPaystack){document.getElementById('payMsg').innerText='Group has not set its Payment Key yet.';return} let h=PaystackPop.setup({key:currentGroup.groupPaystack,email:'member@loyalvault.com',amount:amt*100,currency:'KES',callback:function(r){document.getElementById('payMsg').innerText='Paid to GROUP. Ref: '+r.reference},onClose:function(){document.getElementById('payMsg').innerText='Payment window closed.'}}); h.openIframe(); }
+document.getElementById('logoTap').addEventListener('click',()=>{ ownerTaps++; if(ownerTaps<5) return; ownerTaps=0; let saved=localStorage.getItem('lv_platform_pass'); if(!saved){let p=prompt('Set your platform password. Write it down:'); if(!p) return; let p2=prompt('Type again:'); if(p!==p2){alert('Did not match.');return} localStorage.setItem('lv_platform_pass',p); alert('Platform password saved.'); openOwner();} else{let p=prompt('Enter platform password:'); if(p===saved) openOwner(); else alert('Wrong password.')} });
+function savePerGroupPrice(code){ let input=document.getElementById('price-'+code); if(!input) return; let val=Number(input.value||0); let g=groups.find(x=>x.code===code); if(!g) return; g.subPrice=val; saveLocal(); try{db.ref('groups/'+g.code).set(g);}catch(e){} alert('Price for '+g.name+' changed to KES '+val+' monthly / KES '+(val*10)+' yearly'); openOwner(); }
+function toggleManualLock(code){ let g=groups.find(x=>x.code===code); if(!g) return; g.manualLock=!g.manualLock; saveLocal(); try{db.ref('groups/'+g.code).set(g);}catch(e){} openOwner(); }
+function extendTrial(code){ let g=groups.find(x=>x.code===code); if(!g) return; g.trialEnd=Date.now()+7*24*60*60*1000; g.subStatus='Trial'; g.manualLock=false; saveLocal(); try{db.ref('groups/'+g.code).set(g);}catch(e){} alert('Trial extended 7 days for '+g.name); openOwner(); }
+function openOwner(){syncOwnerKey(); document.getElementById('oGroups').innerText=groups.length; document.getElementById('oMembers').innerText=groups.reduce((a,g)=>a+(g.members?g.members.length:0),0); document.getElementById('oMoney').innerText='KES '+groups.reduce((a,g)=>a+(g.savings?g.savings.reduce((x,y)=>x+Number(y.amount||0),0):0),0).toLocaleString(); document.getElementById('oGroupList').innerHTML=groups.map(g=>{ g=ensureFields(g); let ti=getTrialInfo(g); return '<div class="card" style="margin-bottom:10px"><b>'+g.name+'</b> ('+g.type+') — Code '+g.code+' — Members '+(g.members?g.members.length:0)+' — Creator/Admin: '+g.owner+'<br><span style="font-weight:800;color:'+(ti.locked?'#C00':'#0B6B3A')+'">'+ti.status+'</span> — Plan: '+(g.subPlan||'Monthly')+'<br><label>Monthly Price For THIS Group (KES) — Yearly auto = Monthly x 10</label><input id="price-'+g.code+'" type="number" value="'+g.subPrice+'"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btnGreen" style="flex:1" onclick="savePerGroupPrice(\''+g.code+'\')">Save Price</button><button class="btn btnLine" style="flex:1" onclick="toggleManualLock(\''+g.code+'\')">'+(g.manualLock?'Unlock Manually':'Lock Manually')+'</button><button class="btn btnLine" style="flex:1" onclick="extendTrial(\''+g.code+'\')">Extend Trial +7 Days</button></div><p class="small">Monthly KES '+g.subPrice+' — Yearly KES '+(g.subPrice*10)+' — Trial ends '+new Date(g.trialEnd).toLocaleDateString()+' — Paid until '+(g.paidUntil?new Date(g.paidUntil).toLocaleDateString():'Not paid yet')+'</p></div>'}).join('')||'<p class="small">No groups yet.</p>'; showPage('owner')}
+function saveOwnerSettings(){ let k=document.getElementById('oPaystack').value.trim(); if(k){ OWNER_PAYSTACK=k; localStorage.setItem('lv_platform_key',k); } let p=Number(document.getElementById('oPrice').value||500); DEFAULT_PRICE=p; localStorage.setItem('lv_price',p); localStorage.setItem('lv_announcement',document.getElementById('oAnn').value); document.getElementById('oMsg').innerText='Saved. Default MONTHLY price for NEW groups is now KES '+p+' — Yearly will be KES '+(p*10)+'.'; }
+function saveSupport(){let s=document.getElementById('oSupport').value.trim(); localStorage.setItem('lv_support',s); document.getElementById('supportText').innerText=s?'Support: '+s:'Support contact will be added.'; alert('Support saved.')}
+(function(){let s=localStorage.getItem('lv_support'); if(s) document.getElementById('supportText').innerText='Support: '+s; syncOwnerKey(); typeHint();})();
+</script>
+</body>
+</html>
